@@ -1,0 +1,20 @@
+import { supabase } from "../../../lib/supabase";
+async function handleSubmit(e) {
+  e.preventDefault();
+  setError("");
+  setSubmitting(true);
+
+  try {
+    const result = await signInWithPassword(form);
+    console.log("LOGIN RESULT", result);
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    console.log("SESSION APÓS LOGIN", sessionData.session);
+
+    navigate("/dashboard", { replace: true });
+  } catch (err) {
+    setError(err.message || "Email ou senha inválidos.");
+  } finally {
+    setSubmitting(false);
+  }
+}
